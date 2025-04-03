@@ -3,11 +3,19 @@
 
   window.PhilantracWidget = {
     open: function (slug) {
-      if (document.getElementById('philantrac-modal')) return;
-
       const finalUrl = BASE_URL + encodeURIComponent(slug);
       console.log("PhilantracWidget ➜ Opening:", finalUrl);
 
+      let existingOverlay = document.getElementById('philantrac-modal');
+
+      // ✅ If modal already exists, just update the iframe URL
+      if (existingOverlay) {
+        const iframe = existingOverlay.querySelector('iframe');
+        if (iframe) iframe.src = finalUrl;
+        return;
+      }
+
+      // Otherwise create modal fresh
       const overlay = document.createElement('div');
       overlay.id = 'philantrac-modal';
       overlay.style = `
@@ -63,4 +71,4 @@
       document.body.appendChild(overlay);
     }
   };
-})(); 
+})();
