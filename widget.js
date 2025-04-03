@@ -6,16 +6,13 @@
       const finalUrl = BASE_URL + encodeURIComponent(slug);
       console.log("PhilantracWidget ➜ Opening:", finalUrl);
 
-      let existingOverlay = document.getElementById('philantrac-modal');
-
-      // ✅ If modal already exists, just update the iframe URL
-      if (existingOverlay) {
-        const iframe = existingOverlay.querySelector('iframe');
-        if (iframe) iframe.src = finalUrl;
-        return;
+      // ✅ Remove any existing modal first
+      const existingModal = document.getElementById('philantrac-modal');
+      if (existingModal) {
+        document.body.removeChild(existingModal);
       }
 
-      // Otherwise create modal fresh
+      // ✅ Create new modal
       const overlay = document.createElement('div');
       overlay.id = 'philantrac-modal';
       overlay.style = `
