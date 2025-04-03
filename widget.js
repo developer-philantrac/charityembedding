@@ -44,7 +44,7 @@
 
       // Iframe
       const iframe = document.createElement('iframe');
-      iframe.src = 'https://philantrac.com/embed/' + charityId;
+      iframe.src = 'https://app.philantrac.com' + charityId;
       iframe.style = `
         flex-grow: 1;
         border: none;
