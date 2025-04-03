@@ -5,12 +5,9 @@
     open: function (slug) {
       if (document.getElementById('philantrac-modal')) return;
 
-      // ✅ Log the URL for debugging
+      // ✅ Log the final URL for debugging
       const finalUrl = BASE_URL + encodeURIComponent(slug);
       console.log("PhilantracWidget ➜ Opening:", finalUrl);
-
-      // Detect system theme
-      const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
       const overlay = document.createElement('div');
       overlay.id = 'philantrac-modal';
@@ -30,7 +27,7 @@
       modalContainer.style = `
         width: 90%;
         height: 90%;
-        background: ${isDarkMode ? '#1e1e1e' : 'white'};
+        background: white;
         border-radius: 16px;
         box-shadow: 0 0 20px rgba(0,0,0,0.2);
         position: relative;
@@ -40,9 +37,7 @@
       `;
 
       const logo = document.createElement('img');
-      logo.src = isDarkMode
-        ? 'https://developer-philantrac.github.io/app.personalization/logowhite.png' // Optional: your light version
-        : 'https://developer-philantrac.github.io/app.personalization/logowhite.png';
+      logo.src = 'https://developer-philantrac.github.io/app.personalization/logowhite.png'; // Replace with your actual logo if needed
       logo.alt = 'Philantrac';
       logo.style = `
         height: 40px;
@@ -65,7 +60,7 @@
         top: 12px;
         right: 20px;
         font-size: 30px;
-        color: ${isDarkMode ? '#eee' : '#999'};
+        color: #999;
         cursor: pointer;
         z-index: 1;
       `;
