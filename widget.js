@@ -3,16 +3,16 @@
 
   window.PhilantracWidget = {
     open: function (slug) {
-      const finalUrl = BASE_URL + encodeURIComponent(slug);
+      // Add cache buster to ensure the iframe always reloads
+      const finalUrl = BASE_URL + encodeURIComponent(slug) + '?_=' + Date.now();
       console.log("PhilantracWidget ➜ Opening:", finalUrl);
 
-      // ✅ Remove any existing modal first
+      // Remove any existing modal first
       const existingModal = document.getElementById('philantrac-modal');
       if (existingModal) {
         document.body.removeChild(existingModal);
       }
 
-      // ✅ Create new modal
       const overlay = document.createElement('div');
       overlay.id = 'philantrac-modal';
       overlay.style = `
