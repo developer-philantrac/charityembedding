@@ -41,8 +41,8 @@
 
       const logo = document.createElement('img');
       logo.src = isDarkMode
-        ? 'https://philantrac.com/logo-light.png' // Optional: your light version
-        : 'https://philantrac.com/logo.png';
+        ? 'https://developer-philantrac.github.io/app.personalization/logowhite.png' // Optional: your light version
+        : 'https://developer-philantrac.github.io/app.personalization/logowhite.png';
       logo.alt = 'Philantrac';
       logo.style = `
         height: 40px;
