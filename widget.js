@@ -5,7 +5,6 @@
     open: function (slug) {
       if (document.getElementById('philantrac-modal')) return;
 
-      // ✅ Log the final URL for debugging
       const finalUrl = BASE_URL + encodeURIComponent(slug);
       console.log("PhilantracWidget ➜ Opening:", finalUrl);
 
@@ -20,7 +19,6 @@
         align-items: center;
         justify-content: center;
         z-index: 9999;
-        flex-direction: column;
       `;
 
       const modalContainer = document.createElement('div');
@@ -34,15 +32,6 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-      `;
-
-      const logo = document.createElement('img');
-      logo.src = 'https://developer-philantrac.github.io/app.personalization/logowhite.png'; // Replace with your actual logo if needed
-      logo.alt = 'Philantrac';
-      logo.style = `
-        height: 40px;
-        margin: 16px auto 0;
-        display: block;
       `;
 
       const iframe = document.createElement('iframe');
@@ -69,7 +58,6 @@
       };
 
       modalContainer.appendChild(close);
-      modalContainer.appendChild(logo);
       modalContainer.appendChild(iframe);
       overlay.appendChild(modalContainer);
       document.body.appendChild(overlay);
