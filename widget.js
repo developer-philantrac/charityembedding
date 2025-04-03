@@ -1,9 +1,10 @@
 (function () {
+  const BASE_URL = "https://www.app.philantrac.com/charity/selfembeded/checkout/";
+
   window.PhilantracWidget = {
-    open: function (charityId) {
+    open: function (slug) {
       if (document.getElementById('philantrac-modal')) return;
 
-      // Overlay
       const overlay = document.createElement('div');
       overlay.id = 'philantrac-modal';
       overlay.style = `
@@ -18,7 +19,6 @@
         flex-direction: column;
       `;
 
-      // Modal container
       const modalContainer = document.createElement('div');
       modalContainer.style = `
         width: 90%;
@@ -32,9 +32,8 @@
         overflow: hidden;
       `;
 
-      // Logo
       const logo = document.createElement('img');
-      logo.src = 'https://developer-philantrac.github.io/app.personalization/logowhite.png'; // 🔁 Replace with your actual logo URL
+      logo.src = 'https://philantrac.com/logo.png'; // Replace if needed
       logo.alt = 'Philantrac';
       logo.style = `
         height: 40px;
@@ -42,16 +41,14 @@
         display: block;
       `;
 
-      // Iframe
       const iframe = document.createElement('iframe');
-      iframe.src = 'https://www.app.philantrac.com/' + charityId;
+      iframe.src = BASE_URL + encodeURIComponent(slug); // safe URL encoding
       iframe.style = `
         flex-grow: 1;
         border: none;
         width: 100%;
       `;
 
-      // Close button
       const close = document.createElement('div');
       close.innerHTML = '&times;';
       close.style = `
@@ -74,4 +71,14 @@
       document.body.appendChild(overlay);
     }
   };
+
+  // Listen for payment success to auto-close
+  window.addEventListener("message", function (event) {
+    if (event.data && event.data.event === "philantrac-payment-success") {
+      const modal = document.getElementById("philantrac-modal");
+      if (modal) {
+        document.body.removeChild(modal);
+      }
+    }
+  });
 })();
