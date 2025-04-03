@@ -5,6 +5,13 @@
     open: function (slug) {
       if (document.getElementById('philantrac-modal')) return;
 
+      // ✅ Log the URL for debugging
+      const finalUrl = BASE_URL + encodeURIComponent(slug);
+      console.log("PhilantracWidget ➜ Opening:", finalUrl);
+
+      // Detect system theme
+      const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
       const overlay = document.createElement('div');
       overlay.id = 'philantrac-modal';
       overlay.style = `
@@ -23,7 +30,7 @@
       modalContainer.style = `
         width: 90%;
         height: 90%;
-        background: white;
+        background: ${isDarkMode ? '#1e1e1e' : 'white'};
         border-radius: 16px;
         box-shadow: 0 0 20px rgba(0,0,0,0.2);
         position: relative;
@@ -33,7 +40,9 @@
       `;
 
       const logo = document.createElement('img');
-      logo.src = 'https://philantrac.com/logo.png'; // Replace if needed
+      logo.src = isDarkMode
+        ? 'https://philantrac.com/logo-light.png' // Optional: your light version
+        : 'https://philantrac.com/logo.png';
       logo.alt = 'Philantrac';
       logo.style = `
         height: 40px;
@@ -42,7 +51,7 @@
       `;
 
       const iframe = document.createElement('iframe');
-      iframe.src = BASE_URL + encodeURIComponent(slug); // safe URL encoding
+      iframe.src = finalUrl;
       iframe.style = `
         flex-grow: 1;
         border: none;
@@ -56,7 +65,7 @@
         top: 12px;
         right: 20px;
         font-size: 30px;
-        color: #999;
+        color: ${isDarkMode ? '#eee' : '#999'};
         cursor: pointer;
         z-index: 1;
       `;
@@ -71,14 +80,4 @@
       document.body.appendChild(overlay);
     }
   };
-
-  // Listen for payment success to auto-close
-  window.addEventListener("message", function (event) {
-    if (event.data && event.data.event === "philantrac-payment-success") {
-      const modal = document.getElementById("philantrac-modal");
-      if (modal) {
-        document.body.removeChild(modal);
-      }
-    }
-  });
 })();
