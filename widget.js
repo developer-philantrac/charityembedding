@@ -5,7 +5,7 @@
     iframe: null,
 
     open: function (slug) {
-      const finalUrl = BASE_URL + encodeURIComponent(slug) + "?checkout=qr";
+      const finalUrl = BASE_URL + encodeURIComponent(slug) + "?checkout=embedded";
       console.log("PhilantracWidget ➜ Opening:", finalUrl);
 
       // Remove any existing modal first
