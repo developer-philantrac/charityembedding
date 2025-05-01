@@ -1,10 +1,11 @@
 (function () {
-  const BASE_URL = "https://www.app.philantrac.com/charity/selfembeded/checkout/";
+  const BASE_URL = "https://www.philantrac.com/charity/";
 
   window.PhilantracWidget = {
+    iframe: null,
+
     open: function (slug) {
-      // Add cache buster to ensure the iframe always reloads
-      const finalUrl = BASE_URL + encodeURIComponent(slug) + '?_=' + Date.now();
+      const finalUrl = BASE_URL + encodeURIComponent(slug) + "?checkout=qr";
       console.log("PhilantracWidget ➜ Opening:", finalUrl);
 
       // Remove any existing modal first
@@ -58,14 +59,22 @@
         cursor: pointer;
         z-index: 1;
       `;
-      close.onclick = () => {
-        document.body.removeChild(overlay);
-      };
+      close.onclick = () => this.close();
 
       modalContainer.appendChild(close);
       modalContainer.appendChild(iframe);
       overlay.appendChild(modalContainer);
       document.body.appendChild(overlay);
+
+      this.iframe = overlay;
+    },
+
+    close: function () {
+      const modal = document.getElementById('philantrac-modal');
+      if (modal) {
+        document.body.removeChild(modal);
+        this.iframe = null;
+      }
     }
   };
 })();
