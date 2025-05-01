@@ -5,15 +5,16 @@
     iframe: null,
 
     open: function (slug) {
-      const finalUrl = BASE_URL + encodeURIComponent(slug) + "?checkout=embedded";
+      const finalUrl = BASE_URL + encodeURIComponent(slug) + "?checkout=qr";
       console.log("PhilantracWidget ➜ Opening:", finalUrl);
 
-      // Remove any existing modal first
+      // Remove existing modal if present
       const existingModal = document.getElementById('philantrac-modal');
       if (existingModal) {
         document.body.removeChild(existingModal);
       }
 
+      // Create overlay
       const overlay = document.createElement('div');
       overlay.id = 'philantrac-modal';
       overlay.style = `
@@ -27,6 +28,7 @@
         z-index: 9999;
       `;
 
+      // Modal container
       const modalContainer = document.createElement('div');
       modalContainer.style = `
         width: 90%;
@@ -40,14 +42,17 @@
         overflow: hidden;
       `;
 
+      // Iframe with Philantrac checkout
       const iframe = document.createElement('iframe');
       iframe.src = finalUrl;
       iframe.style = `
         flex-grow: 1;
         border: none;
         width: 100%;
+        height: 100%;
       `;
 
+      // Close button
       const close = document.createElement('div');
       close.innerHTML = '&times;';
       close.style = `
@@ -74,7 +79,16 @@
       if (modal) {
         document.body.removeChild(modal);
         this.iframe = null;
+        console.log("PhilantracWidget ➜ Widget closed.");
       }
     }
   };
+
+  // ✅ Listen for donation completion message
+  window.addEventListener('message', function (event) {
+    if (event.data && event.data.type === 'PHILANTRAC_DONATION_COMPLETE') {
+      console.log("PhilantracWidget ➜ Received donation complete message.");
+      window.PhilantracWidget.close();
+    }
+  });
 })();
