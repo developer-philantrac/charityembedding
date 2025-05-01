@@ -5,12 +5,13 @@
     iframe: null,
 
     open: function (slug) {
-      const finalUrl = BASE_URL + encodeURIComponent(slug) + "?checkout=embedded";
-      console.log("PhilantracWidget ➜ Opening:", finalUrl);
+      const finalUrl = BASE_URL + encodeURIComponent(slug) + "?checkout=qr";
+      console.log("PhilantracWidget ➜ Opening URL:", finalUrl);
 
       // Remove existing modal if present
       const existingModal = document.getElementById('philantrac-modal');
       if (existingModal) {
+        console.log("PhilantracWidget ➜ Removing existing modal.");
         document.body.removeChild(existingModal);
       }
 
@@ -42,9 +43,10 @@
         overflow: hidden;
       `;
 
-      // Iframe with Philantrac checkout
+      // Create iframe
       const iframe = document.createElement('iframe');
       iframe.src = finalUrl;
+      iframe.allow = 'payment'; // ✅ ALLOW Stripe/Google Pay
       iframe.style = `
         flex-grow: 1;
         border: none;
@@ -64,7 +66,10 @@
         cursor: pointer;
         z-index: 1;
       `;
-      close.onclick = () => this.close();
+      close.onclick = () => {
+        console.log("PhilantracWidget ➜ Manual close clicked.");
+        this.close();
+      };
 
       modalContainer.appendChild(close);
       modalContainer.appendChild(iframe);
@@ -72,6 +77,8 @@
       document.body.appendChild(overlay);
 
       this.iframe = overlay;
+
+      console.log("PhilantracWidget ➜ Modal with iframe injected.");
     },
 
     close: function () {
@@ -79,16 +86,22 @@
       if (modal) {
         document.body.removeChild(modal);
         this.iframe = null;
-        console.log("PhilantracWidget ➜ Widget closed.");
+        console.log("PhilantracWidget ➜ Widget closed and DOM cleaned.");
+      } else {
+        console.warn("PhilantracWidget ➜ Tried to close, but modal not found.");
       }
     }
   };
 
-  // ✅ Listen for donation completion message
+  // ✅ Listen for message from iframe (success page)
   window.addEventListener('message', function (event) {
+    console.log("PhilantracWidget ➜ Message received:", event.data);
+
     if (event.data && event.data.type === 'PHILANTRAC_DONATION_COMPLETE') {
-      console.log("PhilantracWidget ➜ Received donation complete message.");
+      console.log("PhilantracWidget ➜ Donation complete message detected. Closing widget.");
       window.PhilantracWidget.close();
     }
   });
+
+  console.log("PhilantracWidget ➜ Script loaded and message listener active.");
 })();
