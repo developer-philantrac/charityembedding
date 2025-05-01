@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Donation Successful | Philantrac</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fafb;
+      color: #111827;
+      text-align: center;
+      padding: 50px 20px;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 26px;
+      margin-bottom: 15px;
+      color: #065f46;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 25px;
+      color: #374151;
+    }
+
+    .button {
+      background-color: #117946;
+      color: white;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #ff8c2e;
+    }
+  </style>
+
+  <script>
+    async function postDonationSuccess() {
+      try {
+        await fetch('https://api.philantrac.com/api:MnO0HNOF/Donations_to_Chartiy_Stats_Table_Transfer', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: 'success' }) // Optional: include real data
+        });
+      } catch (error) {
+        console.error('Error posting donation success:', error);
+      }
+    }
+
+    window.onload = function () {
+      postDonationSuccess();
+
+      // ✅ Send message to parent to close modal
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'PHILANTRAC_DONATION_COMPLETE' }, '*');
+      }
+    };
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <img src="https://api.philantrac.com/vault/fv_fq0Cs/vsOKFbe35HXiPL3Rp8CAn8ruB4w/tRIFrA../50x50Logo.svg" alt="Philantrac Logo" class="logo" onerror="this.style.display='none'">
+    <h2>🎉 Thank you for your donation!</h2>
+    <p>You’ll receive a receipt by email shortly.<br>Want to track all your donations and impact?</p>
+    <a href="https://app.philantrac.com" class="button" target="_blank">Join and track all your goodness</a>
+    <p>powered by Philantrac</p>
+  </div>
+</body>
+</html>
